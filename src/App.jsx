@@ -24,16 +24,27 @@ function App() {
 
   const search = async (term) => {
     
-      let result = await fetch(`http://localhost:3000/user/1`,{
-          method: "POST",
-          body: JSON.stringify({terms:[term]}),
-          headers: {
-              "Content-Type":"application/json"
-          }
-      });
-      let data = await result.json();
-      console.log(data.data);
-      return data.data;
+    const response = await fetch(`http://localhost:3000/user/1`, {
+      method: "POST",
+      body: JSON.stringify({ terms: [term] }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    const data = await response.json();
+    return data.data.map(element => {return {...element, label: element.firstName + " " + element.lastName}});  }
+
+  const searchProduct  = async (term) => {
+    
+    const response = await fetch(`http://localhost:3000/product/1`, {
+      method: "POST",
+      body: JSON.stringify({ terms: [term] }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    const data = await response.json();
+    return data.data.map(element => {return {...element, label: element.name + " " + element.price}});
   }
 
   return (
@@ -43,7 +54,10 @@ function App() {
       <h2>2. Autocomplete User simple avec data en fonction</h2>
       <Autocomplete OnSearch={search} multiple={false}/>
       <h2>3. Autocomplete User multiple avec data en fonction</h2>
-      <Autocomplete OnSearch={search} multiple={true}/>
+      <Autocomplete OnSearch={searchData} multiple={true}/>
+      <h2>4. Autocomplete Product simple avec data en fonction</h2>
+      <Autocomplete OnSearch={searchProduct} multiple={true}/>
+
     </>
   )
 }

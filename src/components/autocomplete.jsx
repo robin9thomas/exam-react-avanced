@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import "./autocomplete.css";
 
-const Autocomplete = ({ OnSearch, template, multiple }) => {
+const Autocomplete = ({ OnSearch, multiple }) => {
   const [inputValue, setInputValue] = useState('');
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
+
   const autocompleteRef = useRef(null);
 
   const handleInputChange = async (e) => {
@@ -45,11 +47,19 @@ const Autocomplete = ({ OnSearch, template, multiple }) => {
         onChange={handleInputChange}
         placeholder="Type to search..."
       />
+      {selectedItems.length > 0 && (
+        <div className="selected-items">
+          {selectedItems.map((item, index) => (
+            <span key={index} className="selected-item">
+              {item.firstName} {item.lastName}
+            </span>
+          ))}
+        </div>
+      )}
       {filteredSuggestions.length > 0 && (
         <ul className="suggestions">
           {filteredSuggestions.map((suggestion, index) => (
             <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-
                 <span>{suggestion.firstName} {suggestion.lastName}</span>
             </li>
           ))}
